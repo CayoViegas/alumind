@@ -1,0 +1,21 @@
+‘AluMind is a startup that offers an app focused on wellness and mental health, giving users access to guided meditations, therapy sessions, and educational content on mental health. With the high growth of its user base, AluMind is starting to experience bottlenecks in analysing feedback from users on different platforms (customer service channels; Discord communities; social networks). Therefore, in this task, you will create an application whose responsibility is to analyse the feedback coming from users, classify it according to their feelings and list the possible improvements contained in it.’
+
+here's an example of how the API works. sentiments are classified as ‘POSITIVO’, ‘NEGATIVO’ or ‘INCONCLUSIVO’, each suggested feature has a code that uniquely identifies it and a description of why the feature is important. if the feedback contains aggressive content or its content doesn't make sense with Alumind, it should be considered SPAM and the request ignored.
+
+request
+{
+"feedback": "Gosto muito de usar o Alumind! Está me ajudando bastante em relação a alguns problemas que tenho. Só queria que houvesse uma forma mais fácil de eu mesmo realizar a edição do meu perfil dentro da minha conta"
+}
+
+response
+json
+{
+    "id": 1,
+    "sentiment": "POSITIVO",
+    "requested_features": [
+        {
+            "code": "EDITAR_PERFIL",
+            "reason": "O usuário gostaria de realizar a edição do próprio perfil"
+        }
+    ]
+}
