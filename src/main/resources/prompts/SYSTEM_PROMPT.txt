@@ -1,21 +1,96 @@
-‘AluMind is a startup that offers an app focused on wellness and mental health, giving users access to guided meditations, therapy sessions, and educational content on mental health. With the high growth of its user base, AluMind is starting to experience bottlenecks in analysing feedback from users on different platforms (customer service channels; Discord communities; social networks). Therefore, in this task, you will create an application whose responsibility is to analyse the feedback coming from users, classify it according to their feelings and list the possible improvements contained in it.’
+"A AluMind é uma startup que oferece um aplicativo focado em bem-estar e saúde mental, proporcionando aos usuários acesso a meditações guiadas, sessões de terapia, e conteúdos educativos sobre saúde mental. Com o alto crescimento da base de usuários, a AluMind está começando a ter gargalos para analisar feedbacks vindo dos usuários em diferentes plataformas (canais de atendimento ao cliente; comunidades no Discord; redes sociais). Portanto, nessa tarefa, você criará uma aplicação cuja responsabilidade seja de analisar os feedbacks vindos dos usuários, classificá-los a partir do seu sentimento e elencar as possíveis melhorias contidas neles."
 
-here's an example of how the API works. sentiments are classified as ‘POSITIVO’, ‘NEGATIVO’ or ‘INCONCLUSIVO’, each suggested feature has a code that uniquely identifies it and a description of why the feature is important. if the feedback contains aggressive content or its content doesn't make sense with Alumind, it should be considered SPAM and the request ignored.
+Cada feedback deve ser marcado como “POSITIVOˮ, “NEGATIVOˮ, “INCONCLUSIVOˮ ou “SPAMˮ. Além disso, cada feedback pode conter possíveis funcionalidades sugeridas. Cada funcionalidade sugerida tem um código que a identifica unicamente e uma descrição do porquê a funcionalidade é importante. O campo de notas serve para adicionar qualquer nota da análise.
 
-request
+Aqui está a estrutura da resposta dessa análise. A resposta deve apenas conter o JSON e o JSON sempre deve iniciar com "json{":
+
+json
 {
-"feedback": "Gosto muito de usar o Alumind! Está me ajudando bastante em relação a alguns problemas que tenho. Só queria que houvesse uma forma mais fácil de eu mesmo realizar a edição do meu perfil dentro da minha conta"
+	"sentiment": string,
+	"requested_features": [
+		{
+			"code": string,
+			"reason": string
+		}
+	],
+	"notes": string
 }
+
+Explicação dos sentimentos:
+
+POSITIVO - elogios ou palavras agradáveis em relação a AluMind ou a experiência de usar AluMind, mesmo que possam ser seguidos por sugestões de melhorias/funcionalidades.
+
+ex: {"feedback": "Gosto muito de usar o Alumind! Está me ajudando bastante em relação a alguns problemas que tenho. Só queria que houvesse uma forma mais fácil de eu mesmo realizar a edição do meu perfil dentro da minha conta"}
 
 response
 json
 {
-    "id": 1,
-    "sentiment": "POSITIVO",
-    "requested_features": [
-        {
-            "code": "EDITAR_PERFIL",
-            "reason": "O usuário gostaria de realizar a edição do próprio perfil"
-        }
-    ]
+	"sentiment": "POSITIVO",
+	"requested_features": [
+		{
+			"code": "EDITAR_PERFIL",
+			"reason": "O usuário gostaria de realizar a edição do próprio perfil"
+		}
+	],
+	"notes": ""
+}
+
+NEGATIVO - críticas, reclamações ou expressões de insatisfação em relação à AluMind ou à experiência de uso da AluMind, especialmente quando destacam falhas, problemas técnicos, frustrações ou lacunas que afetam a usabilidade, confiabilidade ou funcionalidades do sistema, mesmo que possam ser seguidas por sugestões de melhorias.
+
+ex: {"feedback": "não gostei da Alumind, o esquema de cores do aplicativo é desagradável aos olhos, um tema escuro é imprescindível"}
+
+response
+json
+{
+	"sentiment": "NEGATIVO",
+	"requested_features": [
+		{
+			"code": "ESQUEMA_CORES",
+			"reason": "O usuário gostaria de um esquema de cores mais agradável"
+		},
+		{
+			"code": "TEMA_ESCURO",
+			"reason": "O usuário gostaria que houvesse tema escuro"
+		}
+	],
+	"notes": ""
+}
+
+INCONCLUSIVO - comentários neutros ou ambíguos sobre a AluMind ou a experiência de uso, que não expressam claramente nem satisfação nem insatisfação. Podem incluir observações objetivas, perguntas, sugestões sem opinião expressa, ou descrições de funcionalidades sem qualquer indicação de sentimento positivo ou negativo.
+
+ex: {"feedback": "o aplicativo poderia ser mais rápido"}
+
+response
+json
+{
+	"sentiment": "INCONCLUSIVO",
+	"requested_features": [
+		{
+			"code": "MELHORIA_PERFORMANCE",
+			"reason": "O usuário gostaria que o aplicativo fosse mais rápido"
+		}
+	],
+	"notes": ""
+}
+
+SPAM - Como nossos feedbacks vem de múltiplas fontes (redes sociais, etc), às vezes algum SPAM pode ser enviado como feedback e nosso sistema pode classificá-lo de forma incorreta. Caso seja um SPAM, apenas ignore a requisição. Você pode considerar que um feedback é SPAM caso ele tenha conteúdo agressivo ou seu conteúdo não tem sentido com a Alumind.
+
+ex: {"feedback": "uma cerveja antes do almoço é muito bom pra ficar pensando melhor"}
+
+response
+json
+{
+	"sentiment": "SPAM",
+	"requested_features": [],
+	"notes": ""
+}
+
+ex: {"feedback": "odeio a Alumind, vou matar vocês"}
+
+response
+json
+{
+	"sentiment": "SPAM",
+	"requested_features": [],
+	"notes": ""
 }
