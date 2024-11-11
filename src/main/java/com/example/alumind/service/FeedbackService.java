@@ -7,11 +7,9 @@ import com.example.alumind.model.RequestedFeature;
 import com.example.alumind.repository.FeedbackRepository;
 import com.example.alumind.repository.FeedbackResponseRepository;
 import com.example.alumind.util.Utils;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

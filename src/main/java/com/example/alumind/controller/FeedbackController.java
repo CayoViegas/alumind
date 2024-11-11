@@ -1,7 +1,6 @@
 package com.example.alumind.controller;
 
 import com.example.alumind.dto.FeedbackRequest;
-import com.example.alumind.model.Feedback;
 import com.example.alumind.model.FeedbackResponse;
 import com.example.alumind.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,20 +5,15 @@ import com.example.alumind.util.GroqHelper;
 import com.example.alumind.util.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -48,7 +43,6 @@ public class GroqService {
 
         ChatRequest request = new ChatRequest(model, content, systemPrompt, Utils.TEMPERATURE);
         HttpEntity<ChatRequest> entity = new HttpEntity<>(request, headers);
-        System.out.println(entity.getBody());
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         System.out.println(response.getBody());
