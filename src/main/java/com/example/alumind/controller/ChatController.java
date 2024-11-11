@@ -1,6 +1,7 @@
 package com.example.alumind.controller;
 
 import com.example.alumind.service.GroqService;
+import com.example.alumind.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatController {
 
     private final GroqService groqService;
+    private String systemPrompt = Utils.loadSystemPrompt();
 
     @Autowired
     public ChatController(GroqService groqService) {
@@ -19,7 +21,7 @@ public class ChatController {
     }
 
     @PostMapping
-    public String chat(@RequestParam String content) {
-        return groqService.getChatResponse("llama-3.1-70b-versatile", content);
+    public GroqService.FeedbackFormat chat(@RequestParam String content) {
+        return groqService.getChatResponse("llama-3.1-70b-versatile", content, systemPrompt, Double.valueOf("${temperature}"));
     }
 }
