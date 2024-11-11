@@ -1,11 +1,11 @@
 "A AluMind é uma startup que oferece um aplicativo focado em bem-estar e saúde mental, proporcionando aos usuários acesso a meditações guiadas, sessões de terapia, e conteúdos educativos sobre saúde mental. Com o alto crescimento da base de usuários, a AluMind está começando a ter gargalos para analisar feedbacks vindo dos usuários em diferentes plataformas (canais de atendimento ao cliente; comunidades no Discord; redes sociais). Portanto, nessa tarefa, você criará uma aplicação cuja responsabilidade seja de analisar os feedbacks vindos dos usuários, classificá-los a partir do seu sentimento e elencar as possíveis melhorias contidas neles."
 
-Cada feedback deve ser marcado como “POSITIVOˮ, “NEGATIVOˮ, “INCONCLUSIVOˮ ou “SPAMˮ. Além disso, cada feedback pode conter possíveis funcionalidades sugeridas. Cada funcionalidade sugerida tem um código que a identifica unicamente e uma descrição do porquê a funcionalidade é importante. O campo de notas serve para adicionar qualquer nota da análise.
+Cada feedback deve ser marcado como “POSITIVOˮ, “NEGATIVOˮ, “INCONCLUSIVOˮ ou “SPAMˮ. Além disso, cada feedback pode conter possíveis funcionalidades sugeridas. Cada funcionalidade sugerida tem um código que a identifica unicamente e uma descrição do porquê a funcionalidade é importante. Caso a área da funcionalidade não seja especificada, não a adicione. Crie também uma mensagem personalizada para o feedback, a partir do sentimento identificado e das possíveis melhorias propostas no feedback.
 
-A resposta deve ser APENAS no formato JSON. Aqui está a estrutura da resposta dessa análise. Não será aceito um JSON diferente da estrutura a seguir. Não inclua espaços vazios, quebras de linha ("\n"), tabs ("\t"). As chaves devem ser apenas em inglês, "sentiment" e "requested_features":
+A resposta deve ser APENAS no formato JSON. Aqui está a estrutura da resposta dessa análise. Não será aceito um JSON diferente da estrutura a seguir. Não inclua espaços vazios, quebras de linha ("\n"), tabs ("\t"). As chaves devem ser apenas em inglês, "sentiment", "requested_features" e "response_message":
 
 
-{"sentiment": string,"requested_features": [{"code": string,"reason": string}]}
+{"sentiment": string,"requested_features": [{"code": string,"reason": string}],"response_message": string}
 
 Explicação dos sentimentos:
 
@@ -14,45 +14,45 @@ POSITIVO - elogios ou palavras agradáveis em relação a AluMind ou a experiên
 ex: {"feedback": "Gosto muito de usar o Alumind! Está me ajudando bastante em relação a alguns problemas que tenho. Só queria que houvesse uma forma mais fácil de eu mesmo realizar a edição do meu perfil dentro da minha conta"}
 
 response
-{"sentiment": "POSITIVO","requested_features": [{"code": "EDITAR_PERFIL","reason": "O usuário gostaria de realizar a edição do próprio perfil"}]}
+{"sentiment": "POSITIVO","requested_features": [{"code": "EDITAR_PERFIL","reason": "O usuário gostaria de realizar a edição do próprio perfil"}], "response_message": "Obrigado pelo seu feedback positivo! Ficamos felizes em saber que você está gostando do Alumind. Vamos considerar sua sugestão de facilitar a edição do perfil para futuras atualizações."}
 
 NEGATIVO - críticas, reclamações ou expressões de insatisfação em relação à AluMind ou à experiência de uso da AluMind, especialmente quando destacam falhas, problemas técnicos, frustrações ou lacunas que afetam a usabilidade, confiabilidade ou funcionalidades do sistema, mesmo que possam ser seguidas por sugestões de melhorias.
 
 ex: {"feedback": "não gostei da Alumind, o esquema de cores do aplicativo é desagradável aos olhos, um tema escuro é imprescindível"}
 
 response
-{"sentiment": "NEGATIVO","requested_features": [{"code": "ESQUEMA_CORES","reason": "O usuário gostaria de um esquema de cores mais agradável"},{"code": "TEMA_ESCURO","reason": "O usuário gostaria que houvesse tema escuro"}]}
+{"sentiment": "NEGATIVO","requested_features": [{"code": "ESQUEMA_CORES","reason": "O usuário gostaria de um esquema de cores mais agradável"},{"code": "TEMA_ESCURO","reason": "O usuário gostaria que houvesse tema escuro"}], "response_message": "Agradecemos por compartilhar seu feedback. Lamentamos que a experiência com as cores do aplicativo não tenha sido agradável para você. Vamos considerar a implementação de um tema escuro e melhorias no esquema de cores para tornar o uso mais confortável. Estamos comprometidos em oferecer uma experiência mais acessível e agradável no Alumind."}
 
 INCONCLUSIVO - comentários neutros ou ambíguos sobre a AluMind ou a experiência de uso, que não expressam claramente nem satisfação nem insatisfação. Podem incluir observações objetivas, perguntas, sugestões sem opinião expressa, ou descrições de funcionalidades sem qualquer indicação de sentimento positivo ou negativo.
 
 ex: {"feedback": "o aplicativo poderia ser mais rápido"}
 
 response
-{"sentiment": "INCONCLUSIVO","requested_features": [{"code": "MELHORIA_PERFORMANCE","reason": "O usuário gostaria que o aplicativo fosse mais rápido"}]}
+{"sentiment": "INCONCLUSIVO","requested_features": [{"code": "MELHORIA_PERFORMANCE","reason": "O usuário gostaria que o aplicativo fosse mais rápido"}], "response_message": "Obrigado por compartilhar sua sugestão. Entendemos a importância de um aplicativo rápido e estamos sempre buscando maneiras de melhorar a performance do Alumind para oferecer uma experiência mais fluida. Sua contribuição é valiosa para continuarmos aprimorando o aplicativo."}
 
 SPAM - Como nossos feedbacks vem de múltiplas fontes (redes sociais, etc), às vezes algum SPAM pode ser enviado como feedback e nosso sistema pode classificá-lo de forma incorreta. Caso seja um SPAM, apenas ignore a requisição. Você pode considerar que um feedback é SPAM caso ele tenha conteúdo agressivo ou seu conteúdo não tem sentido com a Alumind.
 
 ex: {"feedback": "uma cerveja antes do almoço é muito bom pra ficar pensando melhor"}
 
 response
-{"sentiment": "SPAM","requested_features": []}
+{"sentiment": "SPAM","requested_features": [], "response_message": "Feedback identificado como SPAM."}
 
 ex: {"feedback": "odeio a Alumind, vou matar vocês"}
 
 response
-{"sentiment": "SPAM","requested_features": []}
+{"sentiment": "SPAM","requested_features": [], "response_message": "Feedback identificado como SPAM."}
 
 ex: {"feedback": "homem"}
 
 response
-{"sentiment": "SPAM","requested_features": []}
+{"sentiment": "SPAM","requested_features": [], "response_message": "Feedback identificado como SPAM."}
 
 ex: {"feedback": "gato"}
 
 response
-{"sentiment": "SPAM","requested_features": []}
+{"sentiment": "SPAM","requested_features": [], "response_message": "Feedback identificado como SPAM."}
 
 ex: {"feedback": "spotify é uma boa plataforma?"}
 
 response
-{"sentiment": "SPAM","requested_features": []}
+{"sentiment": "SPAM","requested_features": [], "response_message": "Feedback identificado como SPAM."}

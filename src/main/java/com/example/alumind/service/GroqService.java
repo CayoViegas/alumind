@@ -121,12 +121,19 @@ public class GroqService {
         @JsonProperty("requested_features")
         private List<RequestedFeature> requestedFeatures;
 
+        @JsonProperty("response_message")
+        private String responseMessage;
+
         public String getSentiment() {
             return sentiment;
         }
 
         public List<RequestedFeature> getRequestedFeatures() {
             return requestedFeatures;
+        }
+
+        public String getResponseMessage() {
+            return responseMessage;
         }
     }
 
