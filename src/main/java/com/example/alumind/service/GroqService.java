@@ -59,7 +59,7 @@ public class GroqService {
         try {
             return groqHelper.parseResponse(responseBody);
         } catch (IOException e) {
-            throw new RuntimeException("Error parsing response from GroqService", e);
+            throw new RuntimeException("Erro ao processar resposta do Groq.", e);
         }
     }
 

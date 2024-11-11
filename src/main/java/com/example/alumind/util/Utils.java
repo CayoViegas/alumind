@@ -15,7 +15,7 @@ public class Utils {
             Path path = ResourceUtils.getFile("classpath:prompts/SYSTEM_PROMPT.txt").toPath();
             return Files.readString(path);
         } catch (IOException e) {
-            return "";
+            throw new RuntimeException("Erro ao carregar o prompt do sistema.", e);
         }
     }
 }

@@ -34,28 +34,31 @@ public class FeedbackService {
                 feedbackRequest.getFeedback());
         String systemPrompt = Utils.loadSystemPrompt();
 
-        GroqService.FeedbackFormat feedbackFormat = groqService.getChatResponse("llama-3.1-70b-versatile", userPrompt, systemPrompt, Utils.TEMPERATURE);
+        try {
+            GroqService.FeedbackFormat feedbackFormat = groqService.getChatResponse("llama-3.1-70b-versatile", userPrompt, systemPrompt, Utils.TEMPERATURE);
 
-        if (feedbackFormat.getSentiment().equalsIgnoreCase("SPAM")) {
-            return new FeedbackResponse("SPAM", new ArrayList<>(), "Feedback identificado como SPAM.");
+            if (feedbackFormat.getSentiment().equalsIgnoreCase("SPAM")) {
+                return new FeedbackResponse("SPAM", new ArrayList<>(), "Feedback identificado como SPAM.");
+            }
+
+            List<RequestedFeature> requestedFeatures = feedbackFormat.getRequestedFeatures();
+
+            if (requestedFeatures == null) {
+                requestedFeatures = new ArrayList<>();
+            } else {
+                requestedFeatures.removeIf(feature -> feature.getCode() == null && feature.getReason() == null);
+            }
+
+            FeedbackResponse feedbackResponse = new FeedbackResponse(feedbackFormat.getSentiment(), requestedFeatures, feedbackFormat.getResponseMessage());
+            FeedbackResponse savedResponse = feedbackResponseRepository.save(feedbackResponse);
+
+            Feedback feedback = new Feedback(feedbackRequest.getFeedback(), savedResponse);
+            feedback.setFeedbackResponse(savedResponse);
+            feedbackRepository.save(feedback);
+
+            return savedResponse;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao processar feedback", e);
         }
-
-        List<RequestedFeature> requestedFeatures = feedbackFormat.getRequestedFeatures();
-
-        if (requestedFeatures == null) {
-            requestedFeatures = new ArrayList<>();
-        } else {
-            requestedFeatures.removeIf(feature -> feature.getCode() == null && feature.getReason() == null);
-        }
-
-        FeedbackResponse feedbackResponse = new FeedbackResponse(feedbackFormat.getSentiment(), requestedFeatures, feedbackFormat.getResponseMessage());
-        FeedbackResponse savedResponse = feedbackResponseRepository.save(feedbackResponse);
-
-        Feedback feedback = new Feedback(feedbackRequest.getFeedback(), savedResponse);
-        feedback.setFeedbackResponse(savedResponse);
-        feedbackRepository.save(feedback);
-
-        return savedResponse;
-
     }
 }
