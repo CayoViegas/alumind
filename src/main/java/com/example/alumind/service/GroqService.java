@@ -1,10 +1,12 @@
 package com.example.alumind.service;
 
 import com.example.alumind.model.RequestedFeature;
+import com.example.alumind.util.GroqHelper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,9 @@ public class GroqService {
     private final RestTemplate restTemplate;
     private final String apiUrl;
     private final String apiToken;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private GroqHelper groqHelper;
 
     public GroqService(RestTemplate restTemplate,
                        @Value("${spring.ai.openai.base-url}") String apiUrl,
@@ -52,19 +56,7 @@ public class GroqService {
 
     private FeedbackFormat parseResponse(String responseBody) {
         try {
-            JsonNode rootNode = objectMapper.readTree(responseBody);
-            String content = rootNode.path("choices").get(0).path("message").path("content").asText();
-
-            int jsonStart = content.indexOf("{");
-            int jsonEnd = content.lastIndexOf("}");
-
-            if (jsonStart == -1 || jsonEnd == -1) {
-                throw new RuntimeException("No JSON content found in response");
-            }
-
-            String jsonExtract = content.substring(jsonStart, jsonEnd + 1);
-
-            return objectMapper.readValue(jsonExtract, FeedbackFormat.class);
+            return groqHelper.parseResponse(responseBody);
         } catch (IOException e) {
             throw new RuntimeException("Error parsing response from GroqService", e);
         }
