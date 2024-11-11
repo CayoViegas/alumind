@@ -1,5 +1,6 @@
 package com.example.alumind.service;
 
+import com.example.alumind.dto.FeedbackRequest;
 import com.example.alumind.model.Feedback;
 import com.example.alumind.model.FeedbackResponse;
 import com.example.alumind.model.RequestedFeature;
@@ -26,8 +27,8 @@ public class FeedbackService {
     @Autowired
     private GroqService groqService;
 
-    public FeedbackResponse processFeedback(Feedback feedback) {
-        String userPrompt = String.format("Analise o feedback a seguir quanto ao sentimento e as sugestões de melhorias:\n\nFeedback: %s", feedback.getFeedback());
+    public FeedbackResponse processFeedback(FeedbackRequest feedbackRequest) {
+        String userPrompt = String.format("Analise o feedback a seguir quanto ao sentimento e as sugestões de melhorias:\n\nFeedback: %s", feedbackRequest.getFeedback());
         String systemPrompt = Utils.loadSystemPrompt();
         Double temperature = 0.6;
 
@@ -46,6 +47,7 @@ public class FeedbackService {
         FeedbackResponse feedbackResponse = new FeedbackResponse(feedbackFormat.getSentiment(), requestedFeatures);
         FeedbackResponse savedResponse = feedbackResponseRepository.save(feedbackResponse);
 
+        Feedback feedback = new Feedback(feedbackRequest.getFeedback(), savedResponse);
         feedback.setFeedbackResponse(savedResponse);
         feedbackRepository.save(feedback);
 
