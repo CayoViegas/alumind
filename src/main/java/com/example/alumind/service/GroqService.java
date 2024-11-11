@@ -45,7 +45,6 @@ public class GroqService {
         HttpEntity<ChatRequest> entity = new HttpEntity<>(request, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        System.out.println(response.getBody());
         return parseResponse(response.getBody());
     }
 
