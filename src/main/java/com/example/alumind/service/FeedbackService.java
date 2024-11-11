@@ -33,9 +33,8 @@ public class FeedbackService {
                         "A resposta deve incluir o sentimento ('POSITIVO', 'NEGATIVO' ou 'INCONCLUSIVO') e, caso existam, sugerir melhorias identificadas.",
                 feedbackRequest.getFeedback());
         String systemPrompt = Utils.loadSystemPrompt();
-        Double temperature = 0.6;
 
-        GroqService.FeedbackFormat feedbackFormat = groqService.getChatResponse("llama-3.1-70b-versatile", userPrompt, systemPrompt, temperature);
+        GroqService.FeedbackFormat feedbackFormat = groqService.getChatResponse("llama-3.1-70b-versatile", userPrompt, systemPrompt, Utils.TEMPERATURE);
 
         if (feedbackFormat.getSentiment().equalsIgnoreCase("SPAM")) {
             return new FeedbackResponse("SPAM", new ArrayList<>(), "Feedback identificado como SPAM.");

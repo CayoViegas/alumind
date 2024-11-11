@@ -2,6 +2,7 @@ package com.example.alumind.service;
 
 import com.example.alumind.model.RequestedFeature;
 import com.example.alumind.util.GroqHelper;
+import com.example.alumind.util.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -45,7 +46,7 @@ public class GroqService {
         headers.set("Authorization", "Bearer " + apiToken);
         headers.set("Content-Type", "application/json");
 
-        ChatRequest request = new ChatRequest(model, content, systemPrompt, 0.6);
+        ChatRequest request = new ChatRequest(model, content, systemPrompt, Utils.TEMPERATURE);
         HttpEntity<ChatRequest> entity = new HttpEntity<>(request, headers);
         System.out.println(entity.getBody());
 
