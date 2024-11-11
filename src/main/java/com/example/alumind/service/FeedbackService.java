@@ -52,35 +52,4 @@ public class FeedbackService {
         return savedResponse;
 
     }
-
-    private String extractJsonFromContent(String content) {
-        int startIndex = content.indexOf("json\n{");
-
-        if (startIndex == -1) {
-            return null;
-        }
-
-        startIndex += 5;
-
-        int openBraces = 1;
-        int endIndex = startIndex + 1;
-
-        while (endIndex < content.length() && openBraces > 0) {
-            String currentChar = content.substring(endIndex, endIndex + 1);
-
-            if (currentChar.equals("{")) {
-                openBraces++;
-            } else if (currentChar.equals("}")) {
-                openBraces--;
-            }
-
-            endIndex++;
-        }
-
-        if (openBraces != 0) {
-            throw new RuntimeException("JSON block is not properly closed in the response.");
-        }
-
-        return content.substring(startIndex - 1, endIndex).trim();
-    }
 }
